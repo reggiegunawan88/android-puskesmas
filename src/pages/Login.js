@@ -5,13 +5,28 @@ import {
   View,
   TextInput,
   TouchableOpacity,
+  AsyncStorage,
 } from 'react-native';
 
 export default class App extends React.Component {
-  state = {
-    email: '',
-    password: '',
+  constructor(props) {
+    super(props);
+    this.state = {
+      username: '',
+      password: '',
+    };
+  }
+
+  _loadInitialState = async () => {
+    var value = await AsyncStorage.getItem('user');
+    if (value !== null) {
+      alert('Anda sudah login');
+    }
   };
+
+  componentDidMount() {
+    this._loadInitialState().done();
+  }
 
   render() {
     return (
@@ -22,7 +37,7 @@ export default class App extends React.Component {
             style={styles.inputText}
             placeholder="Username..."
             placeholderTextColor="#003f5c"
-            onChangeText={text => this.setState({email: text})}
+            onChangeText={text => this.setState({username: text})}
           />
         </View>
         <View style={styles.inputView}>
@@ -37,12 +52,50 @@ export default class App extends React.Component {
         <TouchableOpacity>
           <Text style={styles.forgot}>Forgot Password?</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.loginBtn}>
+        <TouchableOpacity style={styles.loginBtn} onPress={this.login}>
           <Text style={styles.loginText}>LOGIN</Text>
         </TouchableOpacity>
       </View>
     );
   }
+
+  login = () => {
+    if (this.state.username == '') {
+      alert('Tolong isi username anda');
+    } else if (this.state.password == '') {
+      alert('Tolong isi password anda');
+    } else {
+      const reqBody =
+        '?username=' + this.state.username + '&password=' + this.state.password;
+      console.log(reqBody);
+      return fetch(
+        'https://webistepuskesmas.000webhostapp.com/mysql-ci-restAPI/index.php/login' +
+          reqBody,
+        {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json, text/plain, */*', // It can be used to overcome cors errors
+            'Content-Type': 'application/json',
+          },
+          body: '',
+        },
+      )
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          if ((data.status = 200)) {
+            alert(data.message);
+          } else if ((data.status = 204)) {
+            alert(data.message);
+          } else {
+            alert(data.message);
+          }
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    }
+  };
 }
 
 const styles = StyleSheet.create({
