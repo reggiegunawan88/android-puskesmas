@@ -8,7 +8,7 @@ import {
   AsyncStorage,
 } from 'react-native';
 
-export default class App extends React.Component {
+export default class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -85,6 +85,7 @@ export default class App extends React.Component {
           console.log(data);
           if ((data.status = 200)) {
             alert(data.message);
+            this.props.navigation.navigate('Home');
           } else if ((data.status = 204)) {
             alert(data.message);
           } else {

@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
-export default class Laporan extends Component {
+export default class daftarLaporan extends Component {
   render() {
     return (
       <View>
-        <Text>Halaman Laporan</Text>
+        <Text>Halaman Daftar Laporan</Text>
       </View>
     );
   }
