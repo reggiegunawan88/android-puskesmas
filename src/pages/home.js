@@ -14,23 +14,27 @@ import Entypo from 'react-native-vector-icons/Entypo';
 
 export default class Home extends Component {
   render() {
+    const {navigate} = this.props.navigation;
     return (
       <View style={styles.container}>
         <View styles={styles.topBar}>
-          <Text style={styles.welcomeTxt}>Halo, 'nama kader'</Text>
+          <Text style={styles.welcomeTxt}>Halo, Kader '...'</Text>
           <Text style={styles.welcomeTxt}>Selamat bertugas!</Text>
         </View>
 
-        <TouchableOpacity style={styles.btnLayout}>
-          <Text>...</Text>
+        <TouchableOpacity
+          style={styles.btnLayout}
+          onPress={() => navigate('Laporan')}>
           <Text style={styles.btnText}>LAPORAN</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.btnLayout}>
-          <Text>icon</Text>
+        <TouchableOpacity
+          style={styles.btnLayout}
+          onPress={() => navigate('daftarLaporan')}>
           <Text style={styles.btnText}>DAFTAR LAPORAN</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.btnLayout}>
-          <Text>icon</Text>
+        <TouchableOpacity
+          style={styles.btnLayout}
+          onPress={() => navigate('Pengaturan')}>
           <Text style={styles.btnText}>PENGATURAN</Text>
         </TouchableOpacity>
       </View>
