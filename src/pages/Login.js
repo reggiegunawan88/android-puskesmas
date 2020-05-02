@@ -5,7 +5,6 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  AsyncStorage,
 } from 'react-native';
 
 export default class Login extends React.Component {
@@ -17,18 +16,19 @@ export default class Login extends React.Component {
     };
   }
 
-  _loadInitialState = async () => {
-    var value = await AsyncStorage.getItem('user');
-    if (value !== null) {
-      alert('Anda sudah login');
-    }
-  };
+  // _loadInitialState = async () => {
+  //   var value = await AsyncStorage.getItem('user');
+  //   if (value !== null) {
+  //     alert('Anda sudah login');
+  //   }
+  // };
 
-  componentDidMount() {
-    this._loadInitialState().done();
-  }
+  // componentDidMount() {
+  //   this._loadInitialState().done();
+  // }
 
   render() {
+    const {navigate} = this.props.navigation;
     return (
       <View style={styles.container}>
         <Text style={styles.logo}>e-Puskesmas</Text>
@@ -85,7 +85,9 @@ export default class Login extends React.Component {
           console.log(data);
           if ((data.status = 200)) {
             alert(data.message);
-            this.props.navigation.navigate('Home');
+            this.props.navigation.navigate('Home', {
+              name: this.state.username,
+            });
           } else if ((data.status = 204)) {
             alert(data.message);
           } else {

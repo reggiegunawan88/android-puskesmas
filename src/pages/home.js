@@ -13,12 +13,19 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Entypo from 'react-native-vector-icons/Entypo';
 
 export default class Home extends Component {
+  capitalize_name(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
   render() {
     const {navigate} = this.props.navigation;
+    const kader_name = this.capitalize_name(
+      this.props.navigation.getParam('name', 'null'),
+    );
     return (
       <View style={styles.container}>
         <View styles={styles.topBar}>
-          <Text style={styles.welcomeTxt}>Halo, Kader '...'</Text>
+          <Text style={styles.welcomeTxt}>Halo, Bapak {kader_name}</Text>
           <Text style={styles.welcomeTxt}>Selamat bertugas!</Text>
         </View>
 
