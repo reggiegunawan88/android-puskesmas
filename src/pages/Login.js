@@ -69,10 +69,10 @@ export default class Login extends React.Component {
         '?username=' + this.state.username + '&password=' + this.state.password;
       console.log(reqBody);
       return fetch(
-        'https://webistepuskesmas.000webhostapp.com/mysql-ci-restAPI/index.php/login' +
+        'http://webistepuskesmas.000webhostapp.com/mysql-ci-restAPI/index.php/login' +
           reqBody,
         {
-          method: 'POST',
+          method: 'GET',
           headers: {
             Accept: 'application/json, text/plain, */*', // It can be used to overcome cors errors
             'Content-Type': 'application/json',
@@ -83,12 +83,13 @@ export default class Login extends React.Component {
         .then(response => response.json())
         .then(data => {
           console.log(data);
-          if ((data.status = 200)) {
+          if (data.status == 200) {
             alert(data.message);
             this.props.navigation.navigate('Home', {
               name: this.state.username,
+              id: data.id,
             });
-          } else if ((data.status = 204)) {
+          } else if (data.status == 204) {
             alert(data.message);
           } else {
             alert(data.message);
