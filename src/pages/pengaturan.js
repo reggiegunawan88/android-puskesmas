@@ -3,9 +3,30 @@ import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 export default class Pengaturan extends Component {
   render() {
     return (
-      <View>
-        <Text>Halaman Pengaturan</Text>
+      <View style={styles.container}>
+        <Text style={styles.textProps}>Halaman Pengaturan</Text>
       </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+  },
+  textProps: {
+    fontSize: 25,
+    fontWeight: 'bold',
+    margin: 10,
+  },
+  topBar: {
+    flex: 1,
+    flexDirection: 'column',
+    backgroundColor: '#fff',
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
