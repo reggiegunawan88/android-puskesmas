@@ -69,7 +69,7 @@ export default class Login extends React.Component {
       const reqBody =
         '?username=' + this.state.username + '&password=' + this.state.password;
       return fetch(
-        'https://webistepuskesmas.000webhostapp.com/mysql-ci-restAPI/index.php/login' +
+        'http://webistepuskesmas.000webhostapp.com/mysql-ci-restAPI/index.php/login' +
           reqBody,
         {
           method: 'GET',
@@ -87,6 +87,7 @@ export default class Login extends React.Component {
             Alert.alert('Selamat!', data.message);
             this.props.navigation.navigate('Home', {
               name: this.state.username,
+              id: data.id,
             });
           } else {
             Alert.alert('Perhatian', data.message);
