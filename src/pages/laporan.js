@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   Button,
 } from 'react-native';
+navigator.geolocation = require('@react-native-community/geolocation');
+
 export default class Laporan extends Component {
   constructor() {
     super();
