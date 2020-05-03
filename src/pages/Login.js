@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
+  Image,
 } from 'react-native';
 
 export default class Login extends React.Component {
@@ -31,7 +32,11 @@ export default class Login extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.logo}>e-Puskesmas</Text>
+        <Image
+          style={styles.img_logo}
+          source={require('../assets/logo-puskesmas.png')}
+        />
+        <Text style={styles.text_logo}>e-Puskesmas</Text>
         <View style={styles.inputView}>
           <TextInput
             style={styles.inputText}
@@ -105,12 +110,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  logo: {
+  text_logo: {
     fontWeight: 'bold',
     fontStyle: 'italic',
     fontSize: 50,
     color: 'white',
-    marginBottom: 40,
+    marginBottom: 50,
+  },
+  img_logo: {
+    width: 150,
+    height: 150,
+    resizeMode: 'contain',
+    margin: 10,
   },
   inputView: {
     width: '80%',
