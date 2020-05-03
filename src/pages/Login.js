@@ -29,7 +29,6 @@ export default class Login extends React.Component {
   // }
 
   render() {
-    const {navigate} = this.props.navigation;
     return (
       <View style={styles.container}>
         <Text style={styles.logo}>e-Puskesmas</Text>
@@ -82,7 +81,6 @@ export default class Login extends React.Component {
       )
         .then(response => response.json())
         .then(data => {
-          console.log(data.status);
           if (data.status === 200) {
             Alert.alert('Selamat!', data.message);
             this.props.navigation.navigate('Home', {

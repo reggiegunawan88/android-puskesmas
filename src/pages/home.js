@@ -13,15 +13,23 @@ import {
 // import Entypo from 'react-native-vector-icons/Entypo';
 
 export default class Home extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      kader_name: this.props.navigation.getParam('name', 'null'),
+      id: this.props.navigation.getParam('id', 'null'),
+    };
+    this.send_userID = this.send_userID.bind(this);
+  }
+
   capitalize_name(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
   render() {
     const {navigate} = this.props.navigation;
-    const kader_name = this.capitalize_name(
-      this.props.navigation.getParam('name', 'null'),
-    );
+    const kader_name = this.capitalize_name(this.state.kader_name);
+
     return (
       <View style={styles.container}>
         <View styles={styles.topBar}>
@@ -34,9 +42,7 @@ export default class Home extends Component {
           onPress={() => navigate('Laporan')}>
           <Text style={styles.btnText}>LAPORAN</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.btnLayout}
-          onPress={() => navigate('daftarLaporan')}>
+        <TouchableOpacity style={styles.btnLayout} onPress={this.send_userID}>
           <Text style={styles.btnText}>DAFTAR LAPORAN</Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -46,6 +52,10 @@ export default class Home extends Component {
         </TouchableOpacity>
       </View>
     );
+  }
+
+  send_userID() {
+    this.props.navigation.navigate('daftarLaporan', {id: this.state.id});
   }
 }
 
