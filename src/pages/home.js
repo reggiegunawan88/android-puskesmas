@@ -101,6 +101,6 @@ const styles = StyleSheet.create({
   welcomeTxt: {
     color: 'black',
     fontWeight: 'bold',
-    fontSize: 15,
+    fontSize: 20,
   },
 });

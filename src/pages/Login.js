@@ -5,6 +5,7 @@ import {
   View,
   TextInput,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 
 export default class Login extends React.Component {
@@ -50,7 +51,7 @@ export default class Login extends React.Component {
           />
         </View>
         <TouchableOpacity>
-          <Text style={styles.forgot}>Forgot Password?</Text>
+          <Text style={styles.forgot}>Lupa password?</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.loginBtn} onPress={this.login}>
           <Text style={styles.loginText}>LOGIN</Text>
@@ -61,18 +62,17 @@ export default class Login extends React.Component {
 
   login = () => {
     if (this.state.username == '') {
-      alert('Tolong isi username anda');
+      Alert.alert('Perhatian', 'Tolong isi username anda');
     } else if (this.state.password == '') {
-      alert('Tolong isi password anda');
+      Alert.alert('Perhatian', 'Tolong isi password anda');
     } else {
       const reqBody =
         '?username=' + this.state.username + '&password=' + this.state.password;
-      console.log(reqBody);
       return fetch(
         'https://webistepuskesmas.000webhostapp.com/mysql-ci-restAPI/index.php/login' +
           reqBody,
         {
-          method: 'POST',
+          method: 'GET',
           headers: {
             Accept: 'application/json, text/plain, */*', // It can be used to overcome cors errors
             'Content-Type': 'application/json',
@@ -82,16 +82,14 @@ export default class Login extends React.Component {
       )
         .then(response => response.json())
         .then(data => {
-          console.log(data);
-          if ((data.status = 200)) {
-            alert(data.message);
+          console.log(data.status);
+          if (data.status === 200) {
+            Alert.alert('Selamat!', data.message);
             this.props.navigation.navigate('Home', {
               name: this.state.username,
             });
-          } else if ((data.status = 204)) {
-            alert(data.message);
           } else {
-            alert(data.message);
+            Alert.alert('Perhatian', data.message);
           }
         })
         .catch(error => {
@@ -130,7 +128,7 @@ const styles = StyleSheet.create({
   },
   forgot: {
     color: 'white',
-    fontSize: 11,
+    fontSize: 15,
   },
   loginBtn: {
     width: '80%',
@@ -144,5 +142,7 @@ const styles = StyleSheet.create({
   },
   loginText: {
     color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
   },
 });
