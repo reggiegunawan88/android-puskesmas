@@ -77,6 +77,10 @@ export default class daftarLaporan extends Component {
               <Text style={styles.email}>
                 Tingkat bahaya: {item.tingkat_bahaya}
               </Text>
+              <Image
+                source={{uri: item.link_gambar}}
+                style={styles.img_laporan}
+              />
             </View>
           )}
           keyExtractor={item => item.nama_jenis_penyakit}
@@ -114,6 +118,12 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 5,
     fontSize: 25,
-    height: 100,
+    height: 150,
+  },
+  img_laporan: {
+    margin: 10,
+    height: 50,
+    width: 50,
+    resizeMode: 'stretch',
   },
 });
