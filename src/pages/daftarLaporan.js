@@ -8,6 +8,7 @@ import {
   FlatList,
   Alert,
 } from 'react-native';
+import {get_daftarLaporan} from '../server';
 
 export default class daftarLaporan extends Component {
   constructor(props) {
@@ -20,22 +21,9 @@ export default class daftarLaporan extends Component {
 
   //langsung fetch data dari DB setelah load page
   componentDidMount() {
-    console.log(this.state.id);
-    return fetch(
-      'http://webistepuskesmas.000webhostapp.com/mysql-ci-restAPI/index.php/laporan?idUser=' +
-        this.state.id,
-      {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json, text/plain, */*', // It can be used to overcome cors errors
-          'Content-Type': 'application/json',
-        },
-        body: '',
-      },
-    )
-      .then(response => response.json())
-      .then(data => {
-        this.setState({data_laporan: data});
+    get_daftarLaporan(this.state.id)
+      .then(result => {
+        this.setState({data_laporan: result});
         console.log(this.state.data_laporan);
       })
       .catch(error => {

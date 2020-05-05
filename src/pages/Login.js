@@ -8,6 +8,7 @@ import {
   Alert,
   Image,
 } from 'react-native';
+import {get_loginData} from './../server';
 
 export default class Login extends React.Component {
   constructor(props) {
@@ -17,17 +18,6 @@ export default class Login extends React.Component {
       password: '',
     };
   }
-
-  // _loadInitialState = async () => {
-  //   var value = await AsyncStorage.getItem('user');
-  //   if (value !== null) {
-  //     alert('Anda sudah login');
-  //   }
-  // };
-
-  // componentDidMount() {
-  //   this._loadInitialState().done();
-  // }
 
   render() {
     return (
@@ -57,43 +47,31 @@ export default class Login extends React.Component {
         <TouchableOpacity>
           <Text style={styles.forgot}>Lupa password?</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.loginBtn} onPress={this.login}>
+        <TouchableOpacity style={styles.loginBtn} onPress={this.submit_login}>
           <Text style={styles.loginText}>LOGIN</Text>
         </TouchableOpacity>
       </View>
     );
   }
 
-  login = () => {
+  submit_login = () => {
     if (this.state.username == '') {
       Alert.alert('Perhatian', 'Tolong isi username anda');
     } else if (this.state.password == '') {
       Alert.alert('Perhatian', 'Tolong isi password anda');
     } else {
-      const reqBody =
-        '?username=' + this.state.username + '&password=' + this.state.password;
-      return fetch(
-        'http://webistepuskesmas.000webhostapp.com/mysql-ci-restAPI/index.php/login' +
-          reqBody,
-        {
-          method: 'GET',
-          headers: {
-            Accept: 'application/json, text/plain, */*', // It can be used to overcome cors errors
-            'Content-Type': 'application/json',
-          },
-          body: '',
-        },
-      )
-        .then(response => response.json())
-        .then(data => {
-          if (data.status === 200) {
-            Alert.alert('Selamat!', data.message);
+      const login_data =
+        'username=' + this.state.username + '&password=' + this.state.password;
+      get_loginData(login_data)
+        .then(result => {
+          if (result.status === 200) {
+            Alert.alert('Selamat!', result.message);
             this.props.navigation.navigate('Home', {
               name: this.state.username,
-              id: data.id,
+              id: result.id,
             });
           } else {
-            Alert.alert('Perhatian', data.message);
+            Alert.alert('Perhatian', result.message);
           }
         })
         .catch(error => {

@@ -8,9 +8,7 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-// import Icon from 'react-native-vector-icons/FontAwesome';
-// import FontAwesome from 'react-native-vector-icons/FontAwesome';
-// import Entypo from 'react-native-vector-icons/Entypo';
+// import Icon from 'react-native-vector-icons/MaterialIcons'; coming soon
 
 export default class Home extends Component {
   constructor(props) {
@@ -19,12 +17,20 @@ export default class Home extends Component {
       kader_name: this.props.navigation.getParam('name', 'null'),
       id: this.props.navigation.getParam('id', 'null'),
     };
-    this.send_userID = this.send_userID.bind(this);
+    this.sendIDTo_laporan = this.sendIDTo_laporan.bind(this);
+    this.sendIDTo_daftarLaporan = this.sendIDTo_daftarLaporan.bind(this);
   }
 
   capitalize_name(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
+
+  sendIDTo_laporan = () => {
+    this.props.navigation.navigate('Laporan', {id: this.state.id});
+  };
+  sendIDTo_daftarLaporan = () => {
+    this.props.navigation.navigate('daftarLaporan', {id: this.state.id});
+  };
 
   render() {
     const {navigate} = this.props.navigation;
@@ -39,10 +45,15 @@ export default class Home extends Component {
 
         <TouchableOpacity
           style={styles.btnLayout}
-          onPress={() => navigate('Laporan')}>
+          onPress={this.sendIDTo_laporan}>
+          {/* <Icon name="stepforward" style={styles.icon}>
+            <Text style={styles.btnText}>LAPORAN</Text>
+          </Icon> */}
           <Text style={styles.btnText}>LAPORAN</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.btnLayout} onPress={this.send_userID}>
+        <TouchableOpacity
+          style={styles.btnLayout}
+          onPress={this.sendIDTo_daftarLaporan}>
           <Text style={styles.btnText}>DAFTAR LAPORAN</Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -52,10 +63,6 @@ export default class Home extends Component {
         </TouchableOpacity>
       </View>
     );
-  }
-
-  send_userID() {
-    this.props.navigation.navigate('daftarLaporan', {id: this.state.id});
   }
 }
 
@@ -112,5 +119,9 @@ const styles = StyleSheet.create({
     color: 'black',
     fontWeight: 'bold',
     fontSize: 20,
+  },
+  icon_btn: {
+    height: 20,
+    width: 20,
   },
 });
