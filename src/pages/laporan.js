@@ -17,19 +17,22 @@ navigator.geolocation = require('@react-native-community/geolocation'); //import
 export default class Laporan extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       user_id: this.props.navigation.getParam('id', 'null'),
       nama_laporan: '',
       nama_pasien: '',
       deskripsi: '',
-      jenis_penyakit: 0,
+      jenis_penyakit: '',
       gambar: 1,
       dropdown_data: [],
       ready: false,
       where: {lat: null, lng: null},
       error: null,
+      refreshScreen: Date(Date.now()).toString(),
     };
     this.get_location = this.get_location.bind(this);
+    this.send_dataLaporan = this.send_dataLaporan.bind(this);
   }
 
   componentDidMount() {
@@ -42,7 +45,6 @@ export default class Laporan extends Component {
       this.setState({dropdown_data: result});
       // console.log(this.state.dropdown_data);
     });
-    this.setState({jenis_penyakit: 0});
   }
 
   //fungsi untuk mengambil posisi koordinat dari GPS
@@ -98,9 +100,14 @@ export default class Laporan extends Component {
   //fungsi untuk mengambil value ID dari dropdown jenis penyakit
   get_dropdown_ID(value) {
     var x = parseInt(value) + 1;
-    this.setState({jenis_penyakit: x});
-    console.log(x);
+    // this.setState({jenis_penyakit: x});
+    this.state.jenis_penyakit = x;
+    // console.log(this.state.jenis_penyakit);
   }
+
+  reloadPage = () => {
+    this.componentDidMount();
+  };
 
   render() {
     return (
@@ -133,6 +140,7 @@ export default class Laporan extends Component {
             <View style={{alignItems: 'center'}}>
               <ModalDropdown
                 style={styles.dropdown}
+                enableEmptySections
                 textStyle={{fontSize: 15, paddingTop: 8, paddingBottom: 8}}
                 defaultValue="Silahkan pilih..."
                 dropdownStyle={{
@@ -180,7 +188,7 @@ export default class Laporan extends Component {
   }
 
   //fungsi utk mengirim data laporan ke web service
-  send_dataLaporan = () => {
+  send_dataLaporan() {
     if (this.state.nama_laporan == '') {
       Alert.alert('Perhatian', 'Tolong isi nama laporan');
     } else if (this.state.nama_pasien == '') {
@@ -229,7 +237,7 @@ export default class Laporan extends Component {
         })
         .catch(error => console.log(error));
     }
-  };
+  }
 }
 
 const styles = StyleSheet.create({

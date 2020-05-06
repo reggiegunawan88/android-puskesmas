@@ -56,6 +56,9 @@ export default class daftarLaporan extends Component {
           renderItem={({item}) => (
             <View style={styles.item}>
               <Text style={styles.name}>
+                Nama penyakit: {item.nama_laporan}
+              </Text>
+              <Text style={styles.name}>
                 Nama penyakit: {item.nama_jenis_penyakit}
               </Text>
               <Text style={styles.email}>
@@ -104,7 +107,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 10,
-    margin: 5,
+    margin: 15,
     fontSize: 25,
     height: 150,
   },
