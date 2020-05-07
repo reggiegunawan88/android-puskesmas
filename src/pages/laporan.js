@@ -12,6 +12,7 @@ import {
 import {send_laporanData} from '../server';
 import {get_jenisPenyakit} from '../server';
 import ModalDropdown from 'react-native-modal-dropdown';
+import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 navigator.geolocation = require('@react-native-community/geolocation'); //important!
 
 export default class Laporan extends Component {
@@ -27,7 +28,7 @@ export default class Laporan extends Component {
       gambar: 1,
       dropdown_data: [],
       ready: false,
-      where: {lat: null, lng: null},
+      where: {lat: 0, lng: 0},
       error: null,
       refreshScreen: Date(Date.now()).toString(),
     };
@@ -110,6 +111,7 @@ export default class Laporan extends Component {
   };
 
   render() {
+    let myMap;
     return (
       <View style={styles.container}>
         <Text style={styles.textProps}>Halaman Laporan</Text>
@@ -171,6 +173,53 @@ export default class Laporan extends Component {
             <Text style={styles.text_form}>
               Longitude: {this.state.where.lng}
             </Text>
+            <View style={{alignItems: 'center'}}>
+              <MapView
+                ref={ref => (myMap = ref)}
+                provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+                showsUserLocation
+                loadingEnabled
+                style={styles.map}
+                region={{
+                  latitude: this.state.where.lat,
+                  longitude: this.state.where.lng,
+                  latitudeDelta: 0.015,
+                  longitudeDelta: 0.0121,
+                }}>
+                <Marker
+                  coordinate={{
+                    latitude: this.state.where.lat,
+                    longitude: this.state.where.lng,
+                  }}
+                  title={''}
+                  description={''}
+                  onPress={() => {
+                    myMap.fitToCoordinates(
+                      [
+                        {
+                          latitude: this.state.where.lat,
+                          longitude: this.state.where.lng,
+                        },
+                      ],
+                      {
+                        animated: true,
+                        edgePadding: {top: 10, bottom: 10, left: 10, right: 10},
+                      },
+                    );
+                  }}
+                />
+                <MapView.Circle
+                  center={{
+                    latitude: this.state.where.lat,
+                    longitude: this.state.where.lng,
+                  }}
+                  radius={200}
+                  strokeWidth={1}
+                  strokeColor="#3399ff"
+                  fillColor="rgba(102,204,153,0.2)"
+                />
+              </MapView>
+            </View>
             <View style={{alignItems: 'center'}}>
               <TouchableOpacity
                 style={styles.btn_submit}
@@ -316,5 +365,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 40,
     marginBottom: 10,
+  },
+  map: {
+    position: 'relative',
+    height: 200,
+    width: '100%',
   },
 });

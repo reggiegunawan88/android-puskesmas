@@ -31,7 +31,7 @@ export default class Login extends React.Component {
           <TextInput
             style={styles.inputText}
             placeholder="Username..."
-            placeholderTextColor="#003f5c"
+            placeholderTextColor="#b7c9ba"
             onChangeText={text => this.setState({username: text})}
           />
         </View>
@@ -40,7 +40,7 @@ export default class Login extends React.Component {
             secureTextEntry
             style={styles.inputText}
             placeholder="Password..."
-            placeholderTextColor="#003f5c"
+            placeholderTextColor="#b7c9ba"
             onChangeText={text => this.setState({password: text})}
           />
         </View>
@@ -64,7 +64,10 @@ export default class Login extends React.Component {
         'username=' + this.state.username + '&password=' + this.state.password;
       get_loginData(login_data)
         .then(result => {
-          if (result.status === 200) {
+          if(result == null){
+            Alert.alert('Gagal', 'Server bermasalah, mohon coba beberapa saat lagi');
+          }
+          else if (result.status === 200) {
             Alert.alert('Selamat!', result.message);
             this.props.navigation.navigate('Home', {
               name: this.state.username,
@@ -84,14 +87,14 @@ export default class Login extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#44c503',
+    backgroundColor: '#b1ccb5',
     alignItems: 'center',
     justifyContent: 'center',
   },
   text_logo: {
     fontWeight: 'bold',
     fontStyle: 'italic',
-    fontSize: 50,
+    fontSize: 40,
     color: 'white',
     marginBottom: 50,
   },
@@ -119,8 +122,8 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   loginBtn: {
-    width: '80%',
-    backgroundColor: '#fb5b5a',
+    width: '70%',
+    backgroundColor: '#43b538',
     borderRadius: 25,
     height: 50,
     alignItems: 'center',
