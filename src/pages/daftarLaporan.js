@@ -6,67 +6,76 @@ import {
   Image,
   TouchableOpacity,
   FlatList,
-  ListView,
+  Alert,
 } from 'react-native';
+import {get_daftarLaporan} from '../server';
 
 export default class daftarLaporan extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      arrIdLaporan: ['1', '2', '3'],
-      arrNamaLaporan: [],
-      arrKeterangan: [],
-      arrLatitude: [],
-      arrLongtitude: [],
-      arrLinkGambar: [],
-      arrNamaJenis: [],
-      arrJenisPenyakit: [],
-      arrNamaPetugas: [],
-      arrStatus: [],
-      arrTanggal: [],
-      arrTingkatBahaya: [],
+      id: this.props.navigation.getParam('id', 'null'),
+      data_laporan: [],
     };
   }
+
+  //langsung fetch data dari DB setelah load page
   componentDidMount() {
-    return fetch(
-      'http://webistepuskesmas.000webhostapp.com/mysql-ci-restAPI/index.php/laporan',
-      {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json, text/plain, */*', // It can be used to overcome cors errors
-          'Content-Type': 'application/json',
-        },
-        body: '',
-      },
-    )
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
+    get_daftarLaporan(this.state.id)
+      .then(result => {
+        this.setState({data_laporan: result});
+        console.log(this.state.data_laporan);
       })
       .catch(error => {
         console.error(error);
       });
   }
 
+  //tambah garis antar item di flatview
+  FlatListItemSeparator = () => {
+    return (
+      <View style={{height: 1, width: '100%', backgroundColor: 'black'}} />
+    );
+  };
+
+  //item per listview bisa diklik buat tampilin detil lebih lanjut nantinya
+  GetItem(item) {
+    //blm perlu skrng
+    Alert.alert(item);
+  }
+
   render() {
+    const {navigate} = this.props.navigation;
     return (
       <View style={styles.container}>
-        <Text style={styles.textProps}>Halaman Pengaturan</Text>
-        {/* <FlatList
-          data={[
-            {key: this.state.arrIdLaporan[0]},
-            {key: 'Dan'},
-            {key: 'Dominic'},
-            {key: 'Jackson'},
-            {key: 'James'},
-            {key: 'Joel'},
-            {key: 'John'},
-            {key: 'Jillian'},
-            {key: 'Jimmy'},
-            {key: 'Julie'},
-          ]}
-          renderItem={({item}) => <Text style={styles.item}>{item.key}</Text>}
-        /> */}
+        <Text style={styles.textProps}>Halaman Daftar Laporan</Text>
+        <Text style={styles.textProps}>ID User: {this.state.id}</Text>
+        <FlatList
+          data={this.state.data_laporan}
+          ItemSeparatorComponent={this.FlatListItemSeparator}
+          renderItem={({item}) => (
+            <View style={styles.item}>
+              <Text style={styles.name}>
+                Nama penyakit: {item.nama_laporan}
+              </Text>
+              <Text style={styles.name}>
+                Nama penyakit: {item.nama_jenis_penyakit}
+              </Text>
+              <Text style={styles.email}>
+                Nama petugas: {item.nama_petugas}
+              </Text>
+              <Text style={styles.email}>Tanggal lapor: {item.tanggal}</Text>
+              <Text style={styles.email}>
+                Tingkat bahaya: {item.tingkat_bahaya}
+              </Text>
+              <Image
+                source={{uri: item.link_gambar}}
+                style={styles.img_laporan}
+              />
+            </View>
+          )}
+          keyExtractor={item => item.nama_jenis_penyakit}
+        />
       </View>
     );
   }
@@ -74,9 +83,12 @@ export default class daftarLaporan extends Component {
 
 const styles = StyleSheet.create({
   container: {
+    justifyContent: 'center',
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
+    marginLeft: 10,
+    marginRight: 10,
+    marginBottom: 10,
+    marginTop: 30,
   },
   textProps: {
     fontSize: 25,
@@ -90,5 +102,19 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  item: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 10,
+    margin: 15,
+    fontSize: 25,
+    height: 150,
+  },
+  img_laporan: {
+    margin: 10,
+    height: 50,
+    width: 50,
+    resizeMode: 'stretch',
   },
 });

@@ -6,7 +6,9 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
+  Image,
 } from 'react-native';
+import {get_loginData} from './../server';
 
 export default class Login extends React.Component {
   constructor(props) {
@@ -17,27 +19,19 @@ export default class Login extends React.Component {
     };
   }
 
-  // _loadInitialState = async () => {
-  //   var value = await AsyncStorage.getItem('user');
-  //   if (value !== null) {
-  //     alert('Anda sudah login');
-  //   }
-  // };
-
-  // componentDidMount() {
-  //   this._loadInitialState().done();
-  // }
-
   render() {
-    const {navigate} = this.props.navigation;
     return (
       <View style={styles.container}>
-        <Text style={styles.logo}>e-Puskesmas</Text>
+        <Image
+          style={styles.img_logo}
+          source={require('../assets/logo-puskesmas.png')}
+        />
+        <Text style={styles.text_logo}>e-Puskesmas</Text>
         <View style={styles.inputView}>
           <TextInput
             style={styles.inputText}
             placeholder="Username..."
-            placeholderTextColor="#003f5c"
+            placeholderTextColor="#b7c9ba"
             onChangeText={text => this.setState({username: text})}
           />
         </View>
@@ -46,51 +40,41 @@ export default class Login extends React.Component {
             secureTextEntry
             style={styles.inputText}
             placeholder="Password..."
-            placeholderTextColor="#003f5c"
+            placeholderTextColor="#b7c9ba"
             onChangeText={text => this.setState({password: text})}
           />
         </View>
         <TouchableOpacity>
           <Text style={styles.forgot}>Lupa password?</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.loginBtn} onPress={this.login}>
+        <TouchableOpacity style={styles.loginBtn} onPress={this.submit_login}>
           <Text style={styles.loginText}>LOGIN</Text>
         </TouchableOpacity>
       </View>
     );
   }
 
-  login = () => {
+  submit_login = () => {
     if (this.state.username == '') {
       Alert.alert('Perhatian', 'Tolong isi username anda');
     } else if (this.state.password == '') {
       Alert.alert('Perhatian', 'Tolong isi password anda');
     } else {
-      const reqBody =
-        '?username=' + this.state.username + '&password=' + this.state.password;
-      return fetch(
-        'http://webistepuskesmas.000webhostapp.com/mysql-ci-restAPI/index.php/login' +
-          reqBody,
-        {
-          method: 'GET',
-          headers: {
-            Accept: 'application/json, text/plain, */*', // It can be used to overcome cors errors
-            'Content-Type': 'application/json',
-          },
-          body: '',
-        },
-      )
-        .then(response => response.json())
-        .then(data => {
-          console.log(data.status);
-          if (data.status === 200) {
-            Alert.alert('Selamat!', data.message);
+      const login_data =
+        'username=' + this.state.username + '&password=' + this.state.password;
+      get_loginData(login_data)
+        .then(result => {
+          if(result == null){
+            Alert.alert('Gagal', 'Server bermasalah, mohon coba beberapa saat lagi');
+          }
+          else if (result.status === 200) {
+            Alert.alert('Selamat!', result.message);
             this.props.navigation.navigate('Home', {
               name: this.state.username,
-              id: data.id,
+              id: result.id,
             });
           } else {
-            Alert.alert('Perhatian', data.message);
+            Alert.alert('Perhatian', result.message);
           }
         })
         .catch(error => {
@@ -103,16 +87,22 @@ export default class Login extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#44c503',
+    backgroundColor: '#b1ccb5',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  logo: {
+  text_logo: {
     fontWeight: 'bold',
     fontStyle: 'italic',
-    fontSize: 50,
+    fontSize: 40,
     color: 'white',
-    marginBottom: 40,
+    marginBottom: 50,
+  },
+  img_logo: {
+    width: 150,
+    height: 150,
+    resizeMode: 'contain',
+    margin: 10,
   },
   inputView: {
     width: '80%',
@@ -132,8 +122,8 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   loginBtn: {
-    width: '80%',
-    backgroundColor: '#fb5b5a',
+    width: '70%',
+    backgroundColor: '#43b538',
     borderRadius: 25,
     height: 50,
     alignItems: 'center',
