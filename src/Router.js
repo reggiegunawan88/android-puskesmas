@@ -5,6 +5,7 @@ import Home from './pages/home';
 import Laporan from './pages/laporan';
 import daftarLaporan from './pages/daftarLaporan';
 import Pengaturan from './pages/pengaturan';
+import ImagePicker from './components/image_picker'
 
 const router = createStackNavigator({
   Login: {
@@ -37,6 +38,12 @@ const router = createStackNavigator({
       headerShown: false,
     },
   },
+  ImagePicker:{
+    screen: ImagePicker,
+    navigationOptions:{
+      headerShown: false,
+    }
+  }
 });
 
 const navigation = createAppContainer(router);

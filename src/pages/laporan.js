@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import ImageUpload from '../components/image_picker';
+navigator.geolocation = require('@react-native-community/geolocation'); //important!
 import {
   View,
   Text,
@@ -13,7 +15,7 @@ import {send_laporanData} from '../server';
 import {get_jenisPenyakit} from '../server';
 import ModalDropdown from 'react-native-modal-dropdown';
 import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
-navigator.geolocation = require('@react-native-community/geolocation'); //important!
+import {ActionSheet, Root} from 'native-base';
 
 export default class Laporan extends Component {
   constructor(props) {
@@ -106,6 +108,7 @@ export default class Laporan extends Component {
     // console.log(this.state.jenis_penyakit);
   }
 
+  //fungsi untuk reset page ketika selesai mengirim laporan
   reloadPage = () => {
     this.componentDidMount();
   };
@@ -158,6 +161,8 @@ export default class Laporan extends Component {
                 onSelect={value => this.get_dropdown_ID(value)}
               />
             </View>
+            <Text style={styles.text_form}>Tambahkan Gambar</Text>
+            <ImageUpload/>
             <Text style={styles.text_form}>Tambahkan lokasi: </Text>
             <View style={{alignItems: 'center'}}>
               <TouchableOpacity
@@ -365,6 +370,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 40,
     marginBottom: 10,
+  },
+  btn_img: {
+    width: '50%',
+    backgroundColor: 'green',
+    borderRadius: 25,
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 10,
   },
   map: {
     position: 'relative',
