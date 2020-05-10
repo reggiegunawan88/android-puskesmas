@@ -7,7 +7,12 @@ import {
   TouchableOpacity,
   FlatList,
   Alert,
+  Button,
 } from 'react-native';
+import AwesomeAlert from 'react-native-awesome-alerts';
+import Modal from 'react-native-modal';
+import ModalComponent from './../components/modal_laporan';
+import ItemLaporan from './../components/item_daftarLaporan';
 import {get_daftarLaporan} from '../server';
 
 export default class daftarLaporan extends Component {
@@ -16,6 +21,8 @@ export default class daftarLaporan extends Component {
     this.state = {
       id: this.props.navigation.getParam('id', 'null'),
       data_laporan: [],
+      modalVisible: false,
+      selected_item: null,
     };
   }
 
@@ -23,8 +30,8 @@ export default class daftarLaporan extends Component {
   componentDidMount() {
     get_daftarLaporan(this.state.id)
       .then(result => {
+        console.log(result);
         this.setState({data_laporan: result});
-        console.log(this.state.data_laporan);
       })
       .catch(error => {
         console.error(error);
@@ -38,11 +45,34 @@ export default class daftarLaporan extends Component {
     );
   };
 
-  //item per listview bisa diklik buat tampilin detil lebih lanjut nantinya
-  GetItem(item) {
-    //blm perlu skrng
-    Alert.alert(item);
-  }
+  _onPressItem = item => {
+    this._showModal(item);
+  };
+
+  _hideMyModal = () => {
+    this.setState({isModalVisible: false});
+  };
+
+  _showModal = item =>
+    this.setState({isModalVisible: true, selectedItem: item});
+
+  _keyExtractor = (item, index) => item.id_laporan;
+
+  //render per list item
+  _renderItem = ({item}) => <ItemLaporan item={item} />;
+
+  // //item per listview bisa diklik buat tampilin detil lebih lanjut nantinya
+  // show_detail() {
+  //   //blm perlu skrng
+  //   // this.setState({expand_detail: !this.expand_detail});
+  //   return (
+  //     <Modal isVisible={true}>
+  //       <View style={{alignItems: 'center'}}>
+  //         <Text>I am the modal content!</Text>
+  //       </View>
+  //     </Modal>
+  //   );
+  // }
 
   render() {
     const {navigate} = this.props.navigation;
@@ -53,29 +83,10 @@ export default class daftarLaporan extends Component {
         <FlatList
           data={this.state.data_laporan}
           ItemSeparatorComponent={this.FlatListItemSeparator}
-          renderItem={({item}) => (
-            <View style={styles.item}>
-              <Text style={styles.name}>
-                Nama penyakit: {item.nama_laporan}
-              </Text>
-              <Text style={styles.name}>
-                Nama penyakit: {item.nama_jenis_penyakit}
-              </Text>
-              <Text style={styles.email}>
-                Nama petugas: {item.nama_petugas}
-              </Text>
-              <Text style={styles.email}>Tanggal lapor: {item.tanggal}</Text>
-              <Text style={styles.email}>
-                Tingkat bahaya: {item.tingkat_bahaya}
-              </Text>
-              <Image
-                source={{uri: item.link_gambar}}
-                style={styles.img_laporan}
-              />
-            </View>
-          )}
+          renderItem={this._renderItem}
           keyExtractor={item => item.nama_jenis_penyakit}
         />
+        <ModalComponent />
       </View>
     );
   }
@@ -102,19 +113,5 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  item: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: 10,
-    margin: 15,
-    fontSize: 25,
-    height: 150,
-  },
-  img_laporan: {
-    margin: 10,
-    height: 50,
-    width: 50,
-    resizeMode: 'stretch',
   },
 });
