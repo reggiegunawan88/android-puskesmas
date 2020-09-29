@@ -1,14 +1,11 @@
-import React, {Component} from 'react';
-import {AppRegistry, View, Text, TextInput, ScrollView} from 'react-native';
-
 const url_login =
-  'http://my-rest-api.000webhostapp.com/puskesmas-api/index.php/login?';
+  'https://ciumbuleuit-puskesmas.000webhostapp.com/index.php/login?';
 const url_listLaporan =
-  'http://my-rest-api.000webhostapp.com/puskesmas-api/index.php/laporan?idUser=';
+  'https://ciumbuleuit-puskesmas.000webhostapp.com/index.php/laporan/kader?id=';
 const url_sendLaporan =
-  'http://my-rest-api.000webhostapp.com/puskesmas-api/index.php/laporan';
+  'https://ciumbuleuit-puskesmas.000webhostapp.com/index.php/laporan';
 const url_jenis_penyakit =
-  'http://my-rest-api.000webhostapp.com/puskesmas-api/index.php/laporan/jenis_penyakit';
+  'https://ciumbuleuit-puskesmas.000webhostapp.com/index.php/laporan/jenis_penyakit';
 
 //fetch data login dari webservice
 async function get_loginData(data) {
@@ -52,6 +49,7 @@ async function send_laporanData(post_body) {
   }
 }
 
+//mendapatkan data jenis penyakit pada komponen buat laporan
 async function get_jenisPenyakit() {
   try {
     let response = await fetch(url_jenis_penyakit);

@@ -2,10 +2,10 @@ import {createStackNavigator} from 'react-navigation-stack';
 import {createAppContainer} from 'react-navigation';
 import Login from './pages/login';
 import Home from './pages/home';
-import Laporan from './pages/laporan';
-import daftarLaporan from './pages/daftarLaporan';
+import BuatLaporan from './pages/buat_laporan';
+import LihatLaporan from './pages/lihat_laporan';
 import Pengaturan from './pages/pengaturan';
-import ImagePicker from './components/image_picker'
+import ImagePicker from './components/image_picker';
 
 const router = createStackNavigator({
   Login: {
@@ -20,14 +20,14 @@ const router = createStackNavigator({
       headerShown: false,
     },
   },
-  Laporan: {
-    screen: Laporan,
+  BuatLaporan: {
+    screen: BuatLaporan,
     navigationOptions: {
       headerShown: false,
     },
   },
-  daftarLaporan: {
-    screen: daftarLaporan,
+  LihatLaporan: {
+    screen: LihatLaporan,
     navigationOptions: {
       headerShown: false,
     },
@@ -38,12 +38,12 @@ const router = createStackNavigator({
       headerShown: false,
     },
   },
-  ImagePicker:{
+  ImagePicker: {
     screen: ImagePicker,
-    navigationOptions:{
+    navigationOptions: {
       headerShown: false,
-    }
-  }
+    },
+  },
 });
 
 const navigation = createAppContainer(router);

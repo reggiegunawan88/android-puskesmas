@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-// import Icon from 'react-native-vector-icons/MaterialIcons'; coming soon
 
 export default class Home extends Component {
   constructor(props) {
@@ -17,19 +16,19 @@ export default class Home extends Component {
       kader_name: this.props.navigation.getParam('name', 'null'),
       id: this.props.navigation.getParam('id', 'null'),
     };
-    this.sendIDTo_laporan = this.sendIDTo_laporan.bind(this);
-    this.sendIDTo_daftarLaporan = this.sendIDTo_daftarLaporan.bind(this);
+    this.sendIDTo_buat_laporan = this.sendIDTo_buat_laporan.bind(this);
+    this.sendIDTo_lihat_laporan = this.sendIDTo_lihat_laporan.bind(this);
   }
 
   capitalize_name(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
-  sendIDTo_laporan = () => {
-    this.props.navigation.navigate('Laporan', {id: this.state.id});
+  sendIDTo_buat_laporan = () => {
+    this.props.navigation.navigate('BuatLaporan', {id: this.state.id});
   };
-  sendIDTo_daftarLaporan = () => {
-    this.props.navigation.navigate('daftarLaporan', {id: this.state.id});
+  sendIDTo_lihat_laporan = () => {
+    this.props.navigation.navigate('LihatLaporan', {id: this.state.id});
   };
 
   render() {
@@ -45,16 +44,13 @@ export default class Home extends Component {
 
         <TouchableOpacity
           style={styles.btnLayout}
-          onPress={this.sendIDTo_laporan}>
-          {/* <Icon name="stepforward" style={styles.icon}>
-            <Text style={styles.btnText}>LAPORAN</Text>
-          </Icon> */}
-          <Text style={styles.btnText}>LAPORAN</Text>
+          onPress={this.sendIDTo_buat_laporan}>
+          <Text style={styles.btnText}>BUAT LAPORAN</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.btnLayout}
-          onPress={this.sendIDTo_daftarLaporan}>
-          <Text style={styles.btnText}>DAFTAR LAPORAN</Text>
+          onPress={this.sendIDTo_lihat_laporan}>
+          <Text style={styles.btnText}>LIHAT LAPORAN</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.btnLayout}

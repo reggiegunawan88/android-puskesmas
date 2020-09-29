@@ -1,12 +1,5 @@
 import React, {Component} from 'react';
-import {
-  Platform,
-  Text,
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-} from 'react-native';
+import {Text, View, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 
 const options_btn = {
@@ -28,6 +21,7 @@ export default class UploadImg extends Component {
       if (response.didCancel) {
         alert('Batal upload gambar');
       } else if (response.error) {
+        console.log(response);
         alert('Error');
       } else {
         let source = {uri: response.uri};
@@ -41,16 +35,11 @@ export default class UploadImg extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.img_area}>
-          <Image
-            source={this.state.avatar}
-            style={{width: '90%', height: 200, margin: 10}}
-          />
+          <Image source={this.state.avatar} style={styles.img_size} />
         </View>
 
-        <TouchableOpacity
-          style={styles.btn_upload}
-          onPress={this.upload_img}>
-          <Text style={{color: '#fff'}}>Upload Gambar</Text>
+        <TouchableOpacity style={styles.btn_upload} onPress={this.upload_img}>
+          <Text style={styles.upload_text}>Upload Gambar</Text>
         </TouchableOpacity>
       </View>
     );
@@ -70,6 +59,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     margin: 10,
   },
+  img_size: {
+    width: '90%',
+    height: 200,
+    margin: 10,
+  },
   btn_upload: {
     width: '40%',
     backgroundColor: 'green',
@@ -78,5 +72,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     margin: 10,
+  },
+  upload_text: {
+    color: '#fff',
+    fontWeight: 'bold',
   },
 });

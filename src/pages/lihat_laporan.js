@@ -11,9 +11,9 @@ import {
 } from 'react-native';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import Modal from 'react-native-modal';
-import ModalComponent from './../components/modal_laporan';
-import ItemLaporan from './../components/item_daftarLaporan';
-import {get_daftarLaporan} from '../server';
+import ModalComponent from '../components/modal_laporan';
+import ItemLaporan from '../components/item_daftarLaporan';
+import {get_daftarLaporan} from '../fetch_webservice';
 
 export default class daftarLaporan extends Component {
   constructor(props) {
@@ -30,6 +30,7 @@ export default class daftarLaporan extends Component {
   componentDidMount() {
     get_daftarLaporan(this.state.id)
       .then(result => {
+        console.log(this.state.id);
         console.log(result);
         this.setState({data_laporan: result});
       })
@@ -78,7 +79,7 @@ export default class daftarLaporan extends Component {
     const {navigate} = this.props.navigation;
     return (
       <View style={styles.container}>
-        <Text style={styles.textProps}>Halaman Daftar Laporan</Text>
+        <Text style={styles.textProps}>LIHAT LAPORAN</Text>
         <Text style={styles.textProps}>ID User: {this.state.id}</Text>
         <FlatList
           data={this.state.data_laporan}
@@ -105,6 +106,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontWeight: 'bold',
     margin: 10,
+    textAlign: 'center',
   },
   topBar: {
     flex: 1,

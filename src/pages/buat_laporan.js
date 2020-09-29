@@ -11,11 +11,10 @@ import {
   ScrollView,
   Alert,
 } from 'react-native';
-import {send_laporanData} from '../server';
-import {get_jenisPenyakit} from '../server';
+import {send_laporanData} from '../fetch_webservice';
+import {get_jenisPenyakit} from '../fetch_webservice';
 import ModalDropdown from 'react-native-modal-dropdown';
 import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
-import {ActionSheet, Root} from 'native-base';
 
 export default class Laporan extends Component {
   constructor(props) {
@@ -46,7 +45,6 @@ export default class Laporan extends Component {
   fetch_jenisPenyakit() {
     get_jenisPenyakit().then(result => {
       this.setState({dropdown_data: result});
-      // console.log(this.state.dropdown_data);
     });
   }
 
@@ -103,9 +101,7 @@ export default class Laporan extends Component {
   //fungsi untuk mengambil value ID dari dropdown jenis penyakit
   get_dropdown_ID(value) {
     var x = parseInt(value) + 1;
-    // this.setState({jenis_penyakit: x});
     this.state.jenis_penyakit = x;
-    // console.log(this.state.jenis_penyakit);
   }
 
   //fungsi untuk reset page ketika selesai mengirim laporan
@@ -117,7 +113,7 @@ export default class Laporan extends Component {
     let myMap;
     return (
       <View style={styles.container}>
-        <Text style={styles.textProps}>Halaman Laporan</Text>
+        <Text style={styles.textProps}>BUAT LAPORAN</Text>
         <View style={styles.form_area}>
           <ScrollView>
             <Text style={styles.text_form}>Nama Laporan: </Text>
@@ -162,7 +158,7 @@ export default class Laporan extends Component {
               />
             </View>
             <Text style={styles.text_form}>Tambahkan Gambar</Text>
-            <ImageUpload/>
+            <ImageUpload />
             <Text style={styles.text_form}>Tambahkan lokasi: </Text>
             <View style={{alignItems: 'center'}}>
               <TouchableOpacity
@@ -254,24 +250,17 @@ export default class Laporan extends Component {
     } else if (this.state.where.lat == null) {
       Alert.alert('Perhatian', 'Lokasi anda belum diketahui');
     } else {
-      // console.log(this.state.user_id);
-      // console.log(this.state.nama_laporan);
-      // console.log(this.state.nama_pasien);
-      // console.log(this.state.deskripsi);
-      // console.log(this.state.jenis_penyakit);
-      // console.log(this.state.gambar);
-      // console.log(this.state.where.lat);
-      // console.log(this.state.where.lng);
       var detail = {
-        user_id: this.state.user_id,
+        id_user: this.state.user_id,
         nama_laporan: this.state.nama_laporan,
         nama_pasien: this.state.nama_pasien,
         deskripsi: this.state.deskripsi,
-        jenis_penyakit: this.state.jenis_penyakit,
+        id_jenis_penyakit: this.state.jenis_penyakit,
         gambar: this.state.gambar,
         latitude: this.state.where.lat,
         longitude: this.state.where.lng,
       };
+      console.log(detail);
 
       var formBody = [];
       for (var property in detail) {
@@ -291,6 +280,7 @@ export default class Laporan extends Component {
         })
         .catch(error => console.log(error));
     }
+    this.componentDidMount;
   }
 }
 

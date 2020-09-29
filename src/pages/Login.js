@@ -8,7 +8,7 @@ import {
   Alert,
   Image,
 } from 'react-native';
-import {get_loginData} from './../server';
+import {get_loginData} from '../fetch_webservice';
 
 export default class Login extends React.Component {
   constructor(props) {
@@ -32,7 +32,7 @@ export default class Login extends React.Component {
             style={styles.inputText}
             placeholder="Username..."
             placeholderTextColor="#b7c9ba"
-            onChangeText={text => this.setState({username: text})}
+            onChangeText={(text) => this.setState({username: text})}
           />
         </View>
         <View style={styles.inputView}>
@@ -41,7 +41,7 @@ export default class Login extends React.Component {
             style={styles.inputText}
             placeholder="Password..."
             placeholderTextColor="#b7c9ba"
-            onChangeText={text => this.setState({password: text})}
+            onChangeText={(text) => this.setState({password: text})}
           />
         </View>
         <TouchableOpacity>
@@ -63,11 +63,13 @@ export default class Login extends React.Component {
       const login_data =
         'username=' + this.state.username + '&password=' + this.state.password;
       get_loginData(login_data)
-        .then(result => {
-          if(result == null){
-            Alert.alert('Gagal', 'Server bermasalah, mohon coba beberapa saat lagi');
-          }
-          else if (result.status === 200) {
+        .then((result) => {
+          if (result == null) {
+            Alert.alert(
+              'Gagal',
+              'Server bermasalah, mohon coba beberapa saat lagi',
+            );
+          } else if (result.status === 200) {
             Alert.alert('Selamat!', result.message);
             this.props.navigation.navigate('Home', {
               name: this.state.username,
@@ -77,7 +79,7 @@ export default class Login extends React.Component {
             Alert.alert('Perhatian', result.message);
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.error(error);
         });
     }
