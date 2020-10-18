@@ -1,93 +1,92 @@
 import React, {Component} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  FlatList,
-  Alert,
-  Button,
-} from 'react-native';
-import AwesomeAlert from 'react-native-awesome-alerts';
-import Modal from 'react-native-modal';
-import ModalComponent from '../components/modal_laporan';
+import {View, Text, StyleSheet, FlatList} from 'react-native';
+import RadioForm, {
+  RadioButton,
+  RadioButtonInput,
+  RadioButtonLabel,
+} from 'react-native-simple-radio-button';
+import axios from 'axios';
 import ItemLaporan from '../components/item_daftarLaporan';
-import {get_daftarLaporan} from '../fetch_webservice';
+
+var radio_props = [
+  {label: 'Laporan Saya', value: 0},
+  {label: 'Laporan Dialihkan', value: 1},
+];
 
 export default class daftarLaporan extends Component {
   constructor(props) {
     super(props);
     this.state = {
       id: this.props.navigation.getParam('id', 'null'),
+      nama_kader: this.props.navigation.getParam('nama_kader', 'null'),
       data_laporan: [],
-      modalVisible: false,
-      selected_item: null,
+      data_kader: [],
+      data_assign: [],
     };
   }
 
   //langsung fetch data dari DB setelah load page
   componentDidMount() {
-    get_daftarLaporan(this.state.id)
-      .then(result => {
-        console.log(this.state.id);
-        console.log(result);
-        this.setState({data_laporan: result});
-      })
-      .catch(error => {
-        console.error(error);
-      });
+    this.get_dataLaporan();
   }
 
-  //tambah garis antar item di flatview
-  FlatListItemSeparator = () => {
-    return (
-      <View style={{height: 1, width: '100%', backgroundColor: 'black'}} />
+  capitalize_name(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
+  get_dataLaporan() {
+    const req1 = axios.get(
+      'https://ciumbuleuit-puskesmas.000webhostapp.com/index.php/laporan/kader?id=' +
+        this.state.id,
     );
+    const req2 = axios.get(
+      'https://ciumbuleuit-puskesmas.000webhostapp.com/index.php/laporan/kader?id=2',
+    );
+    axios.all([req1, req2]).then(
+      axios.spread((response1, response2) => {
+        this.setState({
+          data_laporan: response1.data,
+          data_kader: response1.data,
+          data_assign: response2.data,
+        });
+      }),
+    );
+  }
+
+  choose_radiobtn = value => {
+    let copy_data_kader = this.state.data_kader;
+    let copy_data_assign = this.state.data_assign;
+    if (value == 0) {
+      this.setState({data_laporan: copy_data_kader});
+    } else {
+      this.setState({data_laporan: copy_data_assign});
+    }
   };
-
-  _onPressItem = item => {
-    this._showModal(item);
-  };
-
-  _hideMyModal = () => {
-    this.setState({isModalVisible: false});
-  };
-
-  _showModal = item =>
-    this.setState({isModalVisible: true, selectedItem: item});
-
-  _keyExtractor = (item, index) => item.id_laporan;
 
   //render per list item
   _renderItem = ({item}) => <ItemLaporan item={item} />;
 
-  // //item per listview bisa diklik buat tampilin detil lebih lanjut nantinya
-  // show_detail() {
-  //   //blm perlu skrng
-  //   // this.setState({expand_detail: !this.expand_detail});
-  //   return (
-  //     <Modal isVisible={true}>
-  //       <View style={{alignItems: 'center'}}>
-  //         <Text>I am the modal content!</Text>
-  //       </View>
-  //     </Modal>
-  //   );
-  // }
-
   render() {
-    const {navigate} = this.props.navigation;
     return (
       <View style={styles.container}>
         <Text style={styles.textProps}>LIHAT LAPORAN</Text>
-        <Text style={styles.textProps}>ID User: {this.state.id}</Text>
+        <Text style={styles.textProps}>
+          KADER : {this.capitalize_name(this.state.nama_kader)}
+        </Text>
+        <View style={styles.container_radiobtn}>
+          <RadioForm
+            radio_props={radio_props}
+            initial={0}
+            formHorizontal={true}
+            labelHorizontal={false}
+            onPress={value => this.choose_radiobtn(value)}
+          />
+        </View>
         <FlatList
           data={this.state.data_laporan}
-          ItemSeparatorComponent={this.FlatListItemSeparator}
+          extraData={this.state}
           renderItem={this._renderItem}
-          keyExtractor={item => item.nama_jenis_penyakit}
         />
-        <ModalComponent />
       </View>
     );
   }
@@ -100,7 +99,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginRight: 10,
     marginBottom: 10,
-    marginTop: 30,
+    marginTop: 10,
   },
   textProps: {
     fontSize: 25,
@@ -115,5 +114,11 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  container_radiobtn: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
+    marginTop: 20,
   },
 });

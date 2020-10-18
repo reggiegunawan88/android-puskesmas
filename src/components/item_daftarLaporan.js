@@ -1,26 +1,45 @@
 import React, {Component} from 'react';
 import {Text, View, StyleSheet, TouchableOpacity, Image} from 'react-native';
+import {
+  Card,
+  CardTitle,
+  CardContent,
+  CardAction,
+  CardButton,
+  CardImage,
+} from 'react-native-material-cards';
 
 export default class item_daftarLaporan extends Component {
-  _onPress = () => {
-    this.props.onPressItem(this.props.item);
-  };
   render() {
     return (
-      <TouchableOpacity>
-        <View style={styles.item}>
-          <Text style={styles.name}>Nama Laporan: {this.props.item.nama_laporan}</Text>
-          <Text style={styles.name}>
-            Nama Penyakit: {this.props.item.nama_jenis_penyakit}
-          </Text>
-          <Text style={styles.email}>Nama Petugas: {this.props.item.nama_petugas}</Text>
-          <Text style={styles.email}>Tanggal Lapor: {this.props.item.tanggal}</Text>
-          <Text style={styles.email}>
-            Tingkat Bahaya: {this.props.item.tingkat_bahaya}
-          </Text>
-          <Image source={{uri: this.props.item.link_gambar}} style={styles.img_laporan} />
-        </View>
-      </TouchableOpacity>
+      <Card style={styles.card_style}>
+        <TouchableOpacity>
+          <CardTitle title={this.props.item.nama_laporan} />
+          <View style={styles.item}>
+            <Text style={styles.name}>
+              Nama Penyakit: {this.props.item.nama_jenis_penyakit}
+            </Text>
+            <Text style={styles.email}>
+              Nama Petugas: {this.props.item.nama_petugas}
+            </Text>
+            <Text style={styles.email}>
+              Tanggal Lapor: {this.props.item.tanggal}
+            </Text>
+            <Text style={styles.email}>
+              Tingkat Bahaya: {this.props.item.tingkat_bahaya}
+            </Text>
+            <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+              <Image
+                source={{
+                  uri:
+                    'https://upload.wikimedia.org/wikipedia/id/3/36/Naruto_Uzumaki.png',
+                }}
+                style={styles.img_laporan}
+              />
+            </View>
+          </View>
+        </TouchableOpacity>
+      </Card>
     );
   }
 }
@@ -28,17 +47,23 @@ export default class item_daftarLaporan extends Component {
 const styles = StyleSheet.create({
   item: {
     flex: 1,
-    justifyContent: 'center',
-    padding: 10,
-    margin: 15,
-    fontSize: 25,
+    flexWrap: 'wrap',
+    padding: 5,
+    margin: 5,
+    fontSize: 20,
     height: 150,
   },
   img_laporan: {
-    margin: 10,
-    height: 50,
+    margin: 15,
+    height: 70,
     width: 50,
     resizeMode: 'stretch',
+    borderWidth: 1,
+    borderColor: 'black',
+  },
+  card_style: {
+    elevation: 5,
+    borderRadius: 5,
+    backgroundColor: '#1eb8c9',
   },
 });
-

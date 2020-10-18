@@ -1,13 +1,5 @@
 import React, {Component} from 'react';
-import {
-  View,
-  Button,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  Alert,
-} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 
 export default class Home extends Component {
   constructor(props) {
@@ -28,7 +20,10 @@ export default class Home extends Component {
     this.props.navigation.navigate('BuatLaporan', {id: this.state.id});
   };
   sendIDTo_lihat_laporan = () => {
-    this.props.navigation.navigate('LihatLaporan', {id: this.state.id});
+    this.props.navigation.navigate('LihatLaporan', {
+      id: this.state.id,
+      nama_kader: this.state.kader_name,
+    });
   };
 
   render() {
