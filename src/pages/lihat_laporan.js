@@ -1,10 +1,7 @@
 import React, {Component} from 'react';
 import {View, Text, StyleSheet, FlatList} from 'react-native';
-import RadioForm, {
-  RadioButton,
-  RadioButtonInput,
-  RadioButtonLabel,
-} from 'react-native-simple-radio-button';
+import {SearchBar} from 'react-native-elements';
+import RadioForm from 'react-native-simple-radio-button';
 import axios from 'axios';
 import ItemLaporan from '../components/item_daftarLaporan';
 
@@ -22,7 +19,11 @@ export default class daftarLaporan extends Component {
       data_laporan: [],
       data_kader: [],
       data_assign: [],
+      value_radio: 0,
+      search_txt: '',
     };
+    this.arr_dataKader = [];
+    this.arr_dataAssign = [];
   }
 
   //langsung fetch data dari DB setelah load page
@@ -43,13 +44,18 @@ export default class daftarLaporan extends Component {
       'https://ciumbuleuit-puskesmas.000webhostapp.com/index.php/laporan/kader?id=2',
     );
     axios.all([req1, req2]).then(
-      axios.spread((response1, response2) => {
-        this.setState({
-          data_laporan: response1.data,
-          data_kader: response1.data,
-          data_assign: response2.data,
-        });
-      }),
+      axios.spread(
+        (response1, response2) => {
+          this.setState({
+            data_laporan: response1.data,
+            data_kader: response1.data,
+            data_assign: response2.data,
+          });
+          this.arr_dataKader = response1.data;
+          this.arr_dataAssign = response2.data;
+        },
+        () => console.log(this.state.data_laporan),
+      ),
     );
   }
 
@@ -57,9 +63,31 @@ export default class daftarLaporan extends Component {
     let copy_data_kader = this.state.data_kader;
     let copy_data_assign = this.state.data_assign;
     if (value == 0) {
-      this.setState({data_laporan: copy_data_kader});
+      this.setState({value_radio: value, data_laporan: copy_data_kader});
     } else {
-      this.setState({data_laporan: copy_data_assign});
+      this.setState({value_radio: value, data_laporan: copy_data_assign});
+    }
+  };
+
+  //* fungsi untuk melakukan search pada flatlist
+  searchFilter_function = text => {
+    this.setState({search_txt: text});
+    if (this.state.value_radio == 0) {
+      const newData = this.arr_dataKader.filter(item => {
+        const itemData = `${item.nama_laporan.toUpperCase()}`;
+        const textData = text.toUpperCase();
+
+        return itemData.indexOf(textData) > -1;
+      });
+      this.setState({data_laporan: newData});
+    } else {
+      const newData = this.arr_dataAssign.filter(item => {
+        const itemData = `${item.nama_laporan.toUpperCase()}`;
+        const textData = text.toUpperCase();
+
+        return itemData.indexOf(textData) > -1;
+      });
+      this.setState({data_laporan: newData});
     }
   };
 
@@ -82,6 +110,17 @@ export default class daftarLaporan extends Component {
             onPress={value => this.choose_radiobtn(value)}
           />
         </View>
+        <SearchBar
+          placeholder="Cari laporan..."
+          value={this.state.search_txt}
+          lightTheme
+          round
+          onChangeText={text => this.searchFilter_function(text)}
+          autoCorrect={false}
+          containerStyle={{
+            backgroundColor: 'transparent',
+          }}
+        />
         <FlatList
           data={this.state.data_laporan}
           extraData={this.state}
