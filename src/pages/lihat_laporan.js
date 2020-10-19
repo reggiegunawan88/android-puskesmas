@@ -7,7 +7,7 @@ import ItemLaporan from '../components/item_daftarLaporan';
 
 var radio_props = [
   {label: 'Laporan Saya', value: 0},
-  {label: 'Laporan Dialihkan', value: 1},
+  {label: 'Laporan Dilimpahkan', value: 1},
 ];
 
 export default class daftarLaporan extends Component {
@@ -41,7 +41,8 @@ export default class daftarLaporan extends Component {
         this.state.id,
     );
     const req2 = axios.get(
-      'https://ciumbuleuit-puskesmas.000webhostapp.com/index.php/laporan/kader?id=2',
+      'https://ciumbuleuit-puskesmas.000webhostapp.com/index.php/laporan/petugas?id=' +
+        this.state.id,
     );
     axios.all([req1, req2]).then(
       axios.spread(
@@ -95,6 +96,20 @@ export default class daftarLaporan extends Component {
   _renderItem = ({item}) => <ItemLaporan item={item} />;
 
   render() {
+    const searchBar = (
+      <SearchBar
+        placeholder="Cari laporan..."
+        value={this.state.search_txt}
+        lightTheme
+        round
+        onChangeText={text => this.searchFilter_function(text)}
+        autoCorrect={false}
+        containerStyle={{
+          backgroundColor: 'transparent',
+        }}
+      />
+    );
+
     return (
       <View style={styles.container}>
         <Text style={styles.textProps}>LIHAT LAPORAN</Text>
@@ -110,17 +125,7 @@ export default class daftarLaporan extends Component {
             onPress={value => this.choose_radiobtn(value)}
           />
         </View>
-        <SearchBar
-          placeholder="Cari laporan..."
-          value={this.state.search_txt}
-          lightTheme
-          round
-          onChangeText={text => this.searchFilter_function(text)}
-          autoCorrect={false}
-          containerStyle={{
-            backgroundColor: 'transparent',
-          }}
-        />
+        {this.state.data_laporan.length > 0 ? searchBar : <View />}
         <FlatList
           data={this.state.data_laporan}
           extraData={this.state}

@@ -14,9 +14,12 @@ export default class item_daftarLaporan extends Component {
     return (
       <Card style={styles.card_style}>
         <TouchableOpacity>
-          <CardTitle title={this.props.item.nama_laporan} />
+          <CardTitle
+            style={styles.title_text}
+            title={this.props.item.nama_laporan}
+          />
           <View style={styles.item}>
-            <Text style={styles.name}>
+            <Text style={styles.title}>
               Nama Penyakit: {this.props.item.nama_jenis_penyakit}
             </Text>
             <Text style={styles.email}>
@@ -64,6 +67,11 @@ const styles = StyleSheet.create({
   card_style: {
     elevation: 5,
     borderRadius: 5,
-    backgroundColor: '#1eb8c9',
+    backgroundColor: '#31eb63',
+    fontWeight: 'bold',
+  },
+  title_text: {
+    fontWeight: 'bold',
+    fontSize: 20,
   },
 });
