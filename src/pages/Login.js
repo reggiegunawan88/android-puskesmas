@@ -32,7 +32,7 @@ export default class Login extends React.Component {
             style={styles.inputText}
             placeholder="Username..."
             placeholderTextColor="#b7c9ba"
-            onChangeText={(text) => this.setState({username: text})}
+            onChangeText={text => this.setState({username: text})}
           />
         </View>
         <View style={styles.inputView}>
@@ -41,12 +41,9 @@ export default class Login extends React.Component {
             style={styles.inputText}
             placeholder="Password..."
             placeholderTextColor="#b7c9ba"
-            onChangeText={(text) => this.setState({password: text})}
+            onChangeText={text => this.setState({password: text})}
           />
         </View>
-        <TouchableOpacity>
-          <Text style={styles.forgot}>Lupa password?</Text>
-        </TouchableOpacity>
         <TouchableOpacity style={styles.loginBtn} onPress={this.submit_login}>
           <Text style={styles.loginText}>LOGIN</Text>
         </TouchableOpacity>
@@ -63,7 +60,7 @@ export default class Login extends React.Component {
       const login_data =
         'username=' + this.state.username + '&password=' + this.state.password;
       get_loginData(login_data)
-        .then((result) => {
+        .then(result => {
           if (result == null) {
             Alert.alert(
               'Gagal',
@@ -79,7 +76,7 @@ export default class Login extends React.Component {
             Alert.alert('Perhatian', result.message);
           }
         })
-        .catch((error) => {
+        .catch(error => {
           console.error(error);
         });
     }

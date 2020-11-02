@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import Ionicon from 'react-native-vector-icons/Ionicons';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 
 export default class Home extends Component {
   constructor(props) {
@@ -30,26 +32,65 @@ export default class Home extends Component {
     const {navigate} = this.props.navigation;
     const kader_name = this.capitalize_name(this.state.kader_name);
 
+    const icon_buatLaporan = (
+      <Ionicon
+        name="paper-plane"
+        size={25}
+        style={styles.icon_style}
+        color="#ffff"
+      />
+    );
+
+    const icon_lihatLaporan = (
+      <Ionicon
+        name="newspaper"
+        size={25}
+        style={styles.icon_style}
+        color="#ffff"
+      />
+    );
+
+    const icon_setting = (
+      <Ionicon
+        name="settings"
+        size={25}
+        style={styles.icon_style}
+        color="#ffff"
+      />
+    );
+
+    const icon_user = (
+      <FontAwesomeIcon
+        name="user-circle-o"
+        size={35}
+        style={styles.user_icon}
+        color="#000"
+      />
+    );
+
     return (
       <View style={styles.container}>
         <View styles={styles.topBar}>
           <Text style={styles.welcomeTxt}>Halo, Bapak {kader_name}</Text>
           <Text style={styles.welcomeTxt}>Selamat bertugas!</Text>
         </View>
-
+        <View>{icon_user}</View>
         <TouchableOpacity
           style={styles.btnLayout}
           onPress={this.sendIDTo_buat_laporan}>
+          {icon_buatLaporan}
           <Text style={styles.btnText}>BUAT LAPORAN</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.btnLayout}
           onPress={this.sendIDTo_lihat_laporan}>
+          {icon_lihatLaporan}
           <Text style={styles.btnText}>LIHAT LAPORAN</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.btnLayout}
           onPress={() => navigate('Pengaturan')}>
+          {icon_setting}
           <Text style={styles.btnText}>PENGATURAN</Text>
         </TouchableOpacity>
       </View>
@@ -68,19 +109,17 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     backgroundColor: '#34d622',
-    width: '80%',
+    width: '100%',
   },
   btnLayout: {
-    flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#34d622',
     justifyContent: 'center',
     width: '70%',
     height: 150,
-    paddingLeft: 8,
     borderRadius: 10,
-    marginTop: 30,
-    marginBottom: 10,
+    marginTop: 15,
+    marginBottom: 5,
   },
   buttonHome: {
     width: '70%',
@@ -111,8 +150,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 20,
   },
-  icon_btn: {
-    height: 20,
-    width: 20,
+  icon_style: {
+    margin: 5,
+    padding: 5,
+    height: '30%',
+  },
+  user_icon: {
+    margin: 5,
+    padding: 5,
+    height: 50,
   },
 });
