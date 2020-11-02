@@ -1,9 +1,16 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, FlatList} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  Image,
+} from 'react-native';
 import {SearchBar} from 'react-native-elements';
 import RadioForm from 'react-native-simple-radio-button';
 import axios from 'axios';
-import ItemLaporan from '../components/item_daftarLaporan';
+import {Card, CardTitle} from 'react-native-material-cards';
 
 var radio_props = [
   {label: 'Laporan Saya', value: 0},
@@ -45,18 +52,15 @@ export default class daftarLaporan extends Component {
         this.state.id,
     );
     axios.all([req1, req2]).then(
-      axios.spread(
-        (response1, response2) => {
-          this.setState({
-            data_laporan: response1.data,
-            data_kader: response1.data,
-            data_assign: response2.data,
-          });
-          this.arr_dataKader = response1.data;
-          this.arr_dataAssign = response2.data;
-        },
-        () => console.log(this.state.data_laporan),
-      ),
+      axios.spread((response1, response2) => {
+        this.setState({
+          data_laporan: response1.data,
+          data_kader: response1.data,
+          data_assign: response2.data,
+        });
+        this.arr_dataKader = response1.data;
+        this.arr_dataAssign = response2.data;
+      }),
     );
   }
 
@@ -93,7 +97,35 @@ export default class daftarLaporan extends Component {
   };
 
   //render per list item
-  _renderItem = ({item}) => <ItemLaporan item={item} />;
+  _renderItem = ({item}) => (
+    <TouchableOpacity
+      onPress={() =>
+        this.props.navigation.navigate('DetilLaporan', {item: item})
+      }>
+      <Card style={styles.card_style}>
+        <CardTitle style={styles.title_text} title={item.nama_laporan} />
+        <View style={styles.item}>
+          <Text style={styles.title}>
+            Nama Penyakit: {item.nama_jenis_penyakit}
+          </Text>
+          <Text style={styles.email}>Nama Petugas: {item.nama_petugas}</Text>
+          <Text style={styles.email}>Tanggal Lapor: {item.tanggal}</Text>
+          <Text style={styles.email}>
+            Tingkat Bahaya: {item.tingkat_bahaya}
+          </Text>
+          <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+            <Image
+              source={{
+                uri:
+                  'https://upload.wikimedia.org/wikipedia/id/3/36/Naruto_Uzumaki.png',
+              }}
+              style={styles.img_laporan}
+            />
+          </View>
+        </View>
+      </Card>
+    </TouchableOpacity>
+  );
 
   render() {
     const searchBar = (
@@ -164,5 +196,31 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 10,
     marginTop: 20,
+  },
+  item: {
+    flex: 1,
+    flexWrap: 'wrap',
+    padding: 5,
+    margin: 5,
+    fontSize: 20,
+    height: 150,
+  },
+  img_laporan: {
+    margin: 15,
+    height: 70,
+    width: 50,
+    resizeMode: 'stretch',
+    borderWidth: 1,
+    borderColor: 'black',
+  },
+  card_style: {
+    elevation: 5,
+    borderRadius: 5,
+    backgroundColor: '#31eb63',
+    fontWeight: 'bold',
+  },
+  title_text: {
+    fontWeight: 'bold',
+    fontSize: 20,
   },
 });
