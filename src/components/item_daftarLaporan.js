@@ -1,19 +1,21 @@
 import React, {Component} from 'react';
 import {Text, View, StyleSheet, TouchableOpacity, Image} from 'react-native';
-import {
-  Card,
-  CardTitle,
-  CardContent,
-  CardAction,
-  CardButton,
-  CardImage,
-} from 'react-native-material-cards';
+import {Card, CardTitle} from 'react-native-material-cards';
 
 export default class item_daftarLaporan extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  sendProps_To_detil_laporan = () => {
+    this.props.navigation.navigate('DetilLaporan', {item: this.props.item});
+  };
+
   render() {
     return (
-      <Card style={styles.card_style}>
-        <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => this.props.navigation.navigate('DetilLaporan')}>
+        <Card style={styles.card_style}>
           <CardTitle
             style={styles.title_text}
             title={this.props.item.nama_laporan}
@@ -41,8 +43,8 @@ export default class item_daftarLaporan extends Component {
               />
             </View>
           </View>
-        </TouchableOpacity>
-      </Card>
+        </Card>
+      </TouchableOpacity>
     );
   }
 }

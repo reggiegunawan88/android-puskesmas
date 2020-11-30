@@ -26,7 +26,7 @@ export default class Laporan extends Component {
       nama_pasien: '',
       deskripsi: '',
       jenis_penyakit: '',
-      gambar: 1,
+      gambar: '',
       dropdown_data: [],
       ready: false,
       where: {lat: 0, lng: 0},
@@ -109,6 +109,10 @@ export default class Laporan extends Component {
     this.componentDidMount();
   };
 
+  set_image_base64(data) {
+    this.setState({gambar: data});
+  }
+
   render() {
     let myMap;
     return (
@@ -158,7 +162,7 @@ export default class Laporan extends Component {
               />
             </View>
             <Text style={styles.text_form}>Tambahkan Gambar</Text>
-            <ImageUpload />
+            <ImageUpload receivedProps={data => this.set_image_base64(data)} />
             <Text style={styles.text_form}>Tambahkan lokasi: </Text>
             <View style={{alignItems: 'center'}}>
               <TouchableOpacity
@@ -247,6 +251,8 @@ export default class Laporan extends Component {
       Alert.alert('Perhatian', 'Tolong isi deskripsi laporan');
     } else if (this.state.jenis_penyakit == '') {
       Alert.alert('Perhatian', 'Tolong pilih jenis penyakit');
+    } else if (this.state.gambar == 'null') {
+      Alert.alert('Perhatian', 'Anda belum memasukkan foto');
     } else if (this.state.where.lat == null) {
       Alert.alert('Perhatian', 'Lokasi anda belum diketahui');
     } else {

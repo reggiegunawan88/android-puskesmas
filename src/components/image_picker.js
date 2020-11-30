@@ -25,11 +25,13 @@ export default class UploadImg extends Component {
         alert('Error');
       } else {
         let source = {uri: response.uri};
-        console.log(source);
+        this.props.receivedProps(response.data);
         this.setState({avatar: source});
       }
     });
   };
+
+  send_base64;
 
   render() {
     return (
