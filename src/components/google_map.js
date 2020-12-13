@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
   },
   map: {
     position: 'relative',
-    height: '50%',
+    height: '100%',
     width: '100%',
   },
 });

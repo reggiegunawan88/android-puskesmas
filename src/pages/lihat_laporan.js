@@ -97,11 +97,12 @@ export default class daftarLaporan extends Component {
   };
 
   //render per list item
-  _renderItem = ({item}) => (
+  _renderItem = ({item, index}) => (
     <TouchableOpacity
       onPress={() =>
         this.props.navigation.navigate('DetilLaporan', {item: item})
-      }>
+      }
+      style={styles.button_card}>
       <Card style={styles.card_style}>
         <CardTitle style={styles.title_text} title={item.nama_laporan} />
         <View style={styles.item}>
@@ -113,15 +114,6 @@ export default class daftarLaporan extends Component {
           <Text style={styles.email}>
             Tingkat Bahaya: {item.tingkat_bahaya}
           </Text>
-          <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-            <Image
-              source={{
-                uri:
-                  'https://upload.wikimedia.org/wikipedia/id/3/36/Naruto_Uzumaki.png',
-              }}
-              style={styles.img_laporan}
-            />
-          </View>
         </View>
       </Card>
     </TouchableOpacity>
@@ -157,11 +149,24 @@ export default class daftarLaporan extends Component {
             onPress={value => this.choose_radiobtn(value)}
           />
         </View>
-        {this.state.data_laporan.length > 0 ? searchBar : <View />}
+        {this.state.data_laporan.length > 0 ? (
+          searchBar
+        ) : (
+          <View
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: 100,
+            }}>
+            <Text style={{fontSize: 20, fontWeight: 'bold'}}>Loading...</Text>
+          </View>
+        )}
         <FlatList
+          legacyImplementation={true}
           data={this.state.data_laporan}
           extraData={this.state}
           renderItem={this._renderItem}
+          keyExtractor={item => item.id_laporan}
         />
       </View>
     );
@@ -222,5 +227,8 @@ const styles = StyleSheet.create({
   title_text: {
     fontWeight: 'bold',
     fontSize: 20,
+  },
+  button_card: {
+    borderRadius: 5,
   },
 });

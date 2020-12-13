@@ -56,15 +56,14 @@ const styles = StyleSheet.create({
   },
   img_area: {
     backgroundColor: 'lightgrey',
-    width: '90%',
-    height: 'auto',
+    width: '100%',
+    height: 200,
     alignItems: 'center',
     margin: 10,
   },
   img_size: {
-    width: '90%',
-    height: 200,
-    margin: 10,
+    width: '100%',
+    height: '100%',
   },
   btn_upload: {
     width: '40%',

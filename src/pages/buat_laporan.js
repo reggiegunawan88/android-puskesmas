@@ -6,7 +6,6 @@ import {
   Text,
   TextInput,
   StyleSheet,
-  Image,
   TouchableOpacity,
   ScrollView,
   Alert,
@@ -83,7 +82,7 @@ export default class Laporan extends Component {
       <View
         style={{
           width: 'auto',
-          backgroundColor: 'lightgreen',
+          backgroundColor: 'white',
           alignItems: 'center',
         }}>
         <Text style={{fontSize: 15, margin: 5}}>
@@ -117,114 +116,135 @@ export default class Laporan extends Component {
     let myMap;
     return (
       <View style={styles.container}>
-        <Text style={styles.textProps}>BUAT LAPORAN</Text>
+        <Text style={styles.pageTitle}>BUAT LAPORAN</Text>
         <View style={styles.form_area}>
           <ScrollView>
-            <Text style={styles.text_form}>Nama Laporan: </Text>
-            <TextInput
-              style={styles.text_input}
-              onChangeText={text => this.setState({nama_laporan: text})}
-              placeholder="Ketik disini"
-            />
-            <Text style={styles.text_form}>Nama Pasien: </Text>
-            <TextInput
-              style={styles.text_input}
-              onChangeText={text => this.setState({nama_pasien: text})}
-              placeholder="Ketik disini"
-            />
-            <Text style={styles.text_form}>Deskripsi Laporan: </Text>
-            <TextInput
-              style={styles.text_area}
-              onChangeText={text => this.setState({deskripsi: text})}
-              placeholder="Ketik disini"
-              placeholderTextColor="grey"
-              numberOfLines={10}
-              multiline={true}
-            />
-            <Text style={styles.text_form}>Jenis Penyakit: </Text>
-            <View style={{alignItems: 'center'}}>
-              <ModalDropdown
-                style={styles.dropdown}
-                enableEmptySections
-                textStyle={{fontSize: 15, paddingTop: 8, paddingBottom: 8}}
-                defaultValue="Silahkan pilih..."
-                dropdownStyle={{
-                  width: '30%',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-                dropdownTextStyle={{fontSize: 15}}
-                dropdownTextHighlightStyle={{color: 'blue'}}
-                options={this.state.dropdown_data}
-                renderButtonText={rowData => this._renderButtonText(rowData)}
-                renderRow={this._renderRow.bind(this)}
-                onSelect={value => this.get_dropdown_ID(value)}
+            {/* for text input section */}
+            <View style={{marginBottom: 20}}>
+              <Text style={styles.text_form}>Nama Laporan: </Text>
+              <TextInput
+                style={styles.text_input}
+                onChangeText={text => this.setState({nama_laporan: text})}
+                placeholder="Ketik disini"
+              />
+              <Text style={styles.text_form}>Nama Pasien: </Text>
+              <TextInput
+                style={styles.text_input}
+                onChangeText={text => this.setState({nama_pasien: text})}
+                placeholder="Ketik disini"
+              />
+              <Text style={styles.text_form}>Deskripsi Laporan: </Text>
+              <TextInput
+                style={styles.text_area}
+                onChangeText={text => this.setState({deskripsi: text})}
+                placeholder="Ketik disini"
+                placeholderTextColor="grey"
+                numberOfLines={10}
+                multiline={true}
               />
             </View>
-            <Text style={styles.text_form}>Tambahkan Gambar</Text>
-            <ImageUpload receivedProps={data => this.set_image_base64(data)} />
-            <Text style={styles.text_form}>Tambahkan lokasi: </Text>
-            <View style={{alignItems: 'center'}}>
-              <TouchableOpacity
-                style={styles.btn_gps}
-                title="Fetch GPS"
-                onPress={this.get_location}>
-                <Text style={{color: 'white', fontWeight: 'bold'}}>GPS</Text>
-              </TouchableOpacity>
+
+            {/* for dropdown section */}
+            <View style={{marginBottom: 20}}>
+              <Text style={styles.text_form}>Jenis Penyakit: </Text>
+              <View style={{alignItems: 'center'}}>
+                <ModalDropdown
+                  style={styles.dropdown}
+                  enableEmptySections
+                  textStyle={{fontSize: 15, paddingTop: 8, paddingBottom: 8}}
+                  defaultValue="Silahkan pilih..."
+                  dropdownStyle={{
+                    width: '30%',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                  dropdownTextStyle={{fontSize: 15}}
+                  dropdownTextHighlightStyle={{color: 'blue'}}
+                  options={this.state.dropdown_data}
+                  renderButtonText={rowData => this._renderButtonText(rowData)}
+                  renderRow={this._renderRow.bind(this)}
+                  onSelect={value => this.get_dropdown_ID(value)}
+                />
+              </View>
             </View>
-            <Text style={styles.text_form}>
-              Latitude: {this.state.where.lat}
-            </Text>
-            <Text style={styles.text_form}>
-              Longitude: {this.state.where.lng}
-            </Text>
-            <View style={{alignItems: 'center'}}>
-              <MapView
-                ref={ref => (myMap = ref)}
-                provider={PROVIDER_GOOGLE} // remove if not using Google Maps
-                showsUserLocation
-                loadingEnabled
-                style={styles.map}
-                region={{
-                  latitude: this.state.where.lat,
-                  longitude: this.state.where.lng,
-                  latitudeDelta: 0.015,
-                  longitudeDelta: 0.0121,
-                }}>
-                <Marker
-                  coordinate={{
+
+            {/* for image picker section */}
+            <View style={{marginBottom: 20}}>
+              <Text style={styles.text_form}>Tambahkan Gambar</Text>
+              <ImageUpload
+                receivedProps={data => this.set_image_base64(data)}
+              />
+            </View>
+
+            {/* for google map section */}
+            <View style={{marginBottom: 20}}>
+              <Text style={styles.text_form}>Tambahkan lokasi: </Text>
+              <View style={{alignItems: 'center'}}>
+                <MapView
+                  ref={ref => (myMap = ref)}
+                  provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+                  showsUserLocation
+                  loadingEnabled
+                  style={styles.map}
+                  region={{
                     latitude: this.state.where.lat,
                     longitude: this.state.where.lng,
-                  }}
-                  title={''}
-                  description={''}
-                  onPress={() => {
-                    myMap.fitToCoordinates(
-                      [
+                    latitudeDelta: 0.015,
+                    longitudeDelta: 0.0121,
+                  }}>
+                  <Marker
+                    coordinate={{
+                      latitude: this.state.where.lat,
+                      longitude: this.state.where.lng,
+                    }}
+                    title={''}
+                    description={''}
+                    onPress={() => {
+                      myMap.fitToCoordinates(
+                        [
+                          {
+                            latitude: this.state.where.lat,
+                            longitude: this.state.where.lng,
+                          },
+                        ],
                         {
-                          latitude: this.state.where.lat,
-                          longitude: this.state.where.lng,
+                          animated: true,
+                          edgePadding: {
+                            top: 10,
+                            bottom: 10,
+                            left: 10,
+                            right: 10,
+                          },
                         },
-                      ],
-                      {
-                        animated: true,
-                        edgePadding: {top: 10, bottom: 10, left: 10, right: 10},
-                      },
-                    );
-                  }}
-                />
-                <MapView.Circle
-                  center={{
-                    latitude: this.state.where.lat,
-                    longitude: this.state.where.lng,
-                  }}
-                  radius={200}
-                  strokeWidth={1}
-                  strokeColor="#3399ff"
-                  fillColor="rgba(102,204,153,0.2)"
-                />
-              </MapView>
+                      );
+                    }}
+                  />
+                  <MapView.Circle
+                    center={{
+                      latitude: this.state.where.lat,
+                      longitude: this.state.where.lng,
+                    }}
+                    radius={200}
+                    strokeWidth={1}
+                    strokeColor="#3399ff"
+                    fillColor="rgba(102,204,153,0.2)"
+                  />
+                </MapView>
+              </View>
+
+              <View style={{alignItems: 'center'}}>
+                <TouchableOpacity
+                  style={styles.btn_gps}
+                  title="Fetch GPS"
+                  onPress={this.get_location}>
+                  <Text style={{color: 'white', fontWeight: 'bold'}}>
+                    Lacak Lokasi
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
+
+            {/* for btn submit section */}
             <View style={{alignItems: 'center'}}>
               <TouchableOpacity
                 style={styles.btn_submit}
@@ -293,11 +313,11 @@ export default class Laporan extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    margin: 20,
   },
-  textProps: {
+  pageTitle: {
     fontSize: 25,
     fontWeight: 'bold',
     margin: 10,
@@ -316,7 +336,6 @@ const styles = StyleSheet.create({
   form_area: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#fff',
     width: '100%',
     justifyContent: 'flex-start',
     alignItems: 'stretch',
@@ -327,13 +346,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'black',
     margin: 5,
-    width: 'auto',
+    borderRadius: 5,
   },
   text_area: {
     height: 150,
     borderWidth: 1,
     borderColor: 'black',
     margin: 5,
+    borderRadius: 5,
     justifyContent: 'flex-start',
   },
   dropdown: {
@@ -349,7 +369,7 @@ const styles = StyleSheet.create({
     fontSize: 29,
   },
   btn_gps: {
-    width: '30%',
+    width: '40%',
     backgroundColor: 'green',
     borderRadius: 25,
     height: 50,
