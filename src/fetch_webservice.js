@@ -43,6 +43,7 @@ async function send_laporanData(post_body) {
     let result = await response.text();
     let msg = console.log(result);
     let status_code = await response.status;
+    console.log(status_code);
     return status_code;
   } catch (error) {
     console.log(error);

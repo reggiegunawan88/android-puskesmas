@@ -13,6 +13,7 @@ import {
 import {send_laporanData} from '../fetch_webservice';
 import {get_jenisPenyakit} from '../fetch_webservice';
 import ModalDropdown from 'react-native-modal-dropdown';
+import Spinner from 'react-native-loading-spinner-overlay';
 import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 
 export default class Laporan extends Component {
@@ -26,11 +27,17 @@ export default class Laporan extends Component {
       deskripsi: '',
       jenis_penyakit: '',
       gambar: '',
+      alamat: '',
+      rt: '',
+      rw: '',
       dropdown_data: [],
       ready: false,
       where: {lat: 0, lng: 0},
       error: null,
       refreshScreen: Date(Date.now()).toString(),
+
+      // loading screen indicator
+      spinner: false,
     };
     this.get_location = this.get_location.bind(this);
     this.send_dataLaporan = this.send_dataLaporan.bind(this);
@@ -112,10 +119,23 @@ export default class Laporan extends Component {
     this.setState({gambar: data});
   }
 
+  loading_screen() {
+    this.setState({
+      spinner: !this.state.spinner,
+    });
+  }
+
   render() {
     let myMap;
     return (
       <View style={styles.container}>
+        <Spinner
+          visible={this.state.spinner}
+          textStyle={styles.spinnerTextStyle}
+          animation="slide"
+          color="lightgreen"
+          cancelable={true}
+        />
         <Text style={styles.pageTitle}>BUAT LAPORAN</Text>
         <View style={styles.form_area}>
           <ScrollView>
@@ -242,6 +262,31 @@ export default class Laporan extends Component {
                   </Text>
                 </TouchableOpacity>
               </View>
+              <Text style={styles.text_form}>Alamat: </Text>
+              <TextInput
+                style={styles.text_area}
+                onChangeText={text => this.setState({alamat: text})}
+                placeholder="Ketik disini"
+                placeholderTextColor="grey"
+                numberOfLines={10}
+                multiline={true}
+              />
+              <Text style={styles.text_form}>RT: </Text>
+              <TextInput
+                keyboardType="numeric"
+                style={styles.text_input}
+                onChangeText={text => this.setState({rt: text})}
+                placeholder="Ketik disini"
+                placeholderTextColor="grey"
+              />
+              <Text style={styles.text_form}>RW: </Text>
+              <TextInput
+                keyboardType="numeric"
+                style={styles.text_input}
+                onChangeText={text => this.setState({rw: text})}
+                placeholder="Ketik disini"
+                placeholderTextColor="grey"
+              />
             </View>
 
             {/* for btn submit section */}
@@ -269,6 +314,12 @@ export default class Laporan extends Component {
       Alert.alert('Perhatian', 'Tolong isi nama pasien');
     } else if (this.state.deskripsi == '') {
       Alert.alert('Perhatian', 'Tolong isi deskripsi laporan');
+    } else if (this.state.alamat == '') {
+      Alert.alert('Perhatian', 'Tolong isi alamat');
+    } else if (this.state.rt == '') {
+      Alert.alert('Perhatian', 'Tolong isi nomor RT');
+    } else if (this.state.rw == '') {
+      Alert.alert('Perhatian', 'Tolong isi nomor RW');
     } else if (this.state.jenis_penyakit == '') {
       Alert.alert('Perhatian', 'Tolong pilih jenis penyakit');
     } else if (this.state.gambar == 'null') {
@@ -281,6 +332,9 @@ export default class Laporan extends Component {
         nama_laporan: this.state.nama_laporan,
         nama_pasien: this.state.nama_pasien,
         deskripsi: this.state.deskripsi,
+        alamat: this.state.alamat,
+        rt: this.state.rt,
+        rw: this.state.rw,
         id_jenis_penyakit: this.state.jenis_penyakit,
         gambar: this.state.gambar,
         latitude: this.state.where.lat,
@@ -296,11 +350,14 @@ export default class Laporan extends Component {
       }
       formBody = formBody.join('&');
 
+      this.loading_screen();
       send_laporanData(formBody)
         .then(status_code => {
           if (status_code == 200) {
             Alert.alert('Pemberitahuan', 'Data laporan berhasil dimasukkan');
+            this.setState({spinner: false});
           } else {
+            this.setState({spinner: false});
             Alert.alert('Pemberitahuan', 'Data laporan gagal dimasukkan');
           }
         })
