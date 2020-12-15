@@ -79,6 +79,18 @@ export default class DetilLaporan extends Component {
             <View style={styles.map_wrapper}>
               <GoogleMap item={this.state.item} />
             </View>
+            <Text style={styles.text_form}>RT:</Text>
+            <TextInput
+              style={styles.text_input}
+              value={this.state.item.rt}
+              editable={false}
+            />
+            <Text style={styles.text_form}>RW:</Text>
+            <TextInput
+              style={styles.text_input}
+              value={this.state.item.rw}
+              editable={false}
+            />
           </ScrollView>
         </View>
       </View>

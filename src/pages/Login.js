@@ -9,6 +9,7 @@ import {
   Image,
 } from 'react-native';
 import {get_loginData} from '../fetch_webservice';
+import LoadingScreen from './../components/loading_animation';
 
 export default class Login extends React.Component {
   constructor(props) {
@@ -16,12 +17,22 @@ export default class Login extends React.Component {
     this.state = {
       username: '',
       password: '',
+      loading: false,
     };
+  }
+
+  showLoading_handler() {
+    this.setState({loading: !this.state.loading});
+  }
+
+  hideLoading_handler() {
+    this.setState({loading: false});
   }
 
   render() {
     return (
       <View style={styles.container}>
+        <LoadingScreen isLoading={this.state.loading} />
         <Image
           style={styles.img_logo}
           source={require('../assets/logo-puskesmas.png')}
@@ -59,20 +70,26 @@ export default class Login extends React.Component {
     } else {
       const login_data =
         'username=' + this.state.username + '&password=' + this.state.password;
+
+      this.showLoading_handler();
+
       get_loginData(login_data)
         .then(result => {
           if (result == null) {
+            this.hideLoading_handler();
             Alert.alert(
               'Gagal',
               'Server bermasalah, mohon coba beberapa saat lagi',
             );
           } else if (result.status === 200) {
+            this.hideLoading_handler();
             Alert.alert('Selamat!', result.message);
             this.props.navigation.navigate('Home', {
               name: this.state.username,
               id: result.id,
             });
           } else {
+            this.hideLoading_handler();
             Alert.alert('Perhatian', result.message);
           }
         })

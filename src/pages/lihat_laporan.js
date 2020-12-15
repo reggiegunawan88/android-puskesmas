@@ -11,6 +11,7 @@ import {SearchBar} from 'react-native-elements';
 import RadioForm from 'react-native-simple-radio-button';
 import axios from 'axios';
 import {Card, CardTitle} from 'react-native-material-cards';
+import LoadingScreen from './../components/loading_animation';
 
 var radio_props = [
   {label: 'Laporan Saya', value: 0},
@@ -152,14 +153,7 @@ export default class daftarLaporan extends Component {
         {this.state.data_laporan.length > 0 ? (
           searchBar
         ) : (
-          <View
-            style={{
-              alignItems: 'center',
-              justifyContent: 'center',
-              margin: 100,
-            }}>
-            <Text style={{fontSize: 20, fontWeight: 'bold'}}>Loading...</Text>
-          </View>
+          <LoadingScreen isLoading={true} />
         )}
         <FlatList
           legacyImplementation={true}
