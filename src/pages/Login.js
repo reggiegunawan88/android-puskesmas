@@ -22,7 +22,7 @@ export default class Login extends React.Component {
   }
 
   showLoading_handler() {
-    this.setState({loading: !this.state.loading});
+    this.setState({loading: true});
   }
 
   hideLoading_handler() {

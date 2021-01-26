@@ -12,6 +12,7 @@ export default class Home extends Component {
     };
     this.sendIDTo_buat_laporan = this.sendIDTo_buat_laporan.bind(this);
     this.sendIDTo_lihat_laporan = this.sendIDTo_lihat_laporan.bind(this);
+    this.sendIDTo_pengaturan = this.sendIDTo_pengaturan.bind(this);
   }
 
   capitalize_name(str) {
@@ -25,6 +26,12 @@ export default class Home extends Component {
     this.props.navigation.navigate('LihatLaporan', {
       id: this.state.id,
       nama_kader: this.state.kader_name,
+    });
+  };
+
+  sendIDTo_pengaturan = () => {
+    this.props.navigation.navigate('Pengaturan', {
+      id: this.state.id,
     });
   };
 
@@ -89,7 +96,7 @@ export default class Home extends Component {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.btnLayout}
-          onPress={() => navigate('Pengaturan')}>
+          onPress={this.sendIDTo_pengaturan}>
           {icon_setting}
           <Text style={styles.btnText}>PENGATURAN</Text>
         </TouchableOpacity>

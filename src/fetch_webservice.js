@@ -6,6 +6,8 @@ const url_sendLaporan =
   'https://ciumbuleuit-puskesmas.000webhostapp.com/index.php/laporan';
 const url_jenis_penyakit =
   'https://ciumbuleuit-puskesmas.000webhostapp.com/index.php/laporan/jenis_penyakit';
+const url_update_kader =
+  'https://ciumbuleuit-puskesmas.000webhostapp.com/index.php/user/update';
 
 //fetch data login dari webservice
 async function get_loginData(data) {
@@ -61,7 +63,28 @@ async function get_jenisPenyakit() {
   }
 }
 
+//mengirim data kader yang diperbarui ke webservice
+async function update_kader_profile(post_body) {
+  try {
+    let response = await fetch(url_update_kader, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: post_body,
+    });
+    let result = await response.text();
+    let status_code = await response.status;
+    console.log(status_code);
+    return status_code;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export {get_loginData};
 export {get_daftarLaporan};
 export {send_laporanData};
 export {get_jenisPenyakit};
+export {update_kader_profile};
