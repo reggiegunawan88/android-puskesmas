@@ -10,5 +10,5 @@ Features:
 # Starting Project
 
 To start project, type 'npm install' on your command line interface.
-After install the dependencies and modules, just type 'npm start'.
+After install the dependencies and modules, just type 'npx react-native run-android'.
 
